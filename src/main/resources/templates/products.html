@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Products</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<h2>Products:</h2>
+<table id="products">
+    <!--/*@thymesVar id="products" type="java.util.List<com.kousenit.shopping.entities.Product>"*/-->
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Price</th>
+        </tr>
+    </thead>
+    <tr th:border="1" style="width: 50%"
+        th:each="p : ${products}">
+        <td th:text="${p.id}">id</td>
+        <td th:text="${p.name}">name</td>
+        <td th:text="${p.price}">price</td>
+    </tr>
+</table>
+
+<h2>New Product</h2>
+<div>
+    <form method="post" th:object="${product}">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name"
+               placeholder="Product name" th:field="*{name}">
+        <span class="validationError"
+              th:if="${#fields.hasErrors('name')}"
+              th:errors="*{name}">Name Error</span>
+
+        <label for="price">Price</label>
+        <input type="text" id="price" name="price"
+               placeholder="Price" th:field="*{price}">
+        <span class="validationError"
+              th:if="${#fields.hasErrors('price')}"
+              th:errors="*{price}">Price Error</span>
+
+        <input th:type="submit" value="Submit">
+    </form>
+</div>
+</body>
+</html>
