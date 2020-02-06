@@ -1,7 +1,6 @@
 package com.kousenit.shopping.entities;
 
 import lombok.Data;
-import org.springframework.validation.annotation.Validated;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
