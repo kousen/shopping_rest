@@ -6,7 +6,9 @@ import com.kousenit.shopping.entities.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,8 +38,13 @@ public class ProductRestController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product insertProduct(@RequestBody Product product) {
-        return repository.save(product);
+    public ResponseEntity<Product> insertProduct(@RequestBody Product product) {
+        Product p = repository.save(product);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
+                .path("/{id}")
+                .buildAndExpand(p.getId())
+                .toUri();
+        return ResponseEntity.created(location).body(p);
     }
 
     @PutMapping("{id}")
