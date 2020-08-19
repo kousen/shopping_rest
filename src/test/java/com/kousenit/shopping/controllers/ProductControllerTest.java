@@ -29,7 +29,7 @@ class ProductControllerTest {
     @MockBean
     private ProductRepository repository;
 
-    private List<Product> products = Arrays.asList(
+    private final List<Product> products = Arrays.asList(
             new Product(1,"baseball", 9.99),
             new Product(2, "football", 14.95),
             new Product(3, "basketball", 11.99)
