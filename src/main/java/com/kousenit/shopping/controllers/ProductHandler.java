@@ -17,7 +17,7 @@ import static org.springframework.web.servlet.function.ServerResponse.ok;
 
 @Component
 public class ProductHandler {
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
     public ProductHandler(ProductRepository repository) {
         this.repository = repository;

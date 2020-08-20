@@ -3,7 +3,8 @@ package com.kousenit.shopping.controllers;
 import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
 import com.kousenit.shopping.entities.ProductNotFoundException;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +16,8 @@ import java.util.Optional;
 
 @Controller
 @RequestMapping("/products")
-@Slf4j
 public class ProductController {
+    private final Logger log = LoggerFactory.getLogger(ProductController.class.getName());
 
     private final ProductRepository repository;
 
