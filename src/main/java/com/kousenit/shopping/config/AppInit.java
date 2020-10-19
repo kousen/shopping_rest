@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.util.Arrays;
 
 @Component
-@Profile({"prod", "dev"})
+@Profile("!test")
 public class AppInit implements CommandLineRunner {
     private final ProductRepository repository;
 

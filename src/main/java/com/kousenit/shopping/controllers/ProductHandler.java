@@ -27,7 +27,7 @@ public class ProductHandler {
         return ok().body(repository.findAll());
     }
 
-    public ServerResponse getPersonById(ServerRequest request) {
+    public ServerResponse getProductById(ServerRequest request) {
         int id = Integer.parseInt(request.pathVariable("id"));
         Optional<Product> optional = repository.findById(id);
         return optional.map(product ->

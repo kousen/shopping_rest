@@ -15,7 +15,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/rest")
 public class ProductRestController {
-    private ProductRepository repository;
+    private final ProductRepository repository;
 
     public ProductRestController(ProductRepository repository) {
         this.repository = repository;

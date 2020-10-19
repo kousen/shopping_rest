@@ -10,7 +10,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.web.servlet.function.RequestPredicates.accept;
 import static org.springframework.web.servlet.function.RouterFunctions.route;
 
-@Configuration
+@Configuration  // JavaConfig approach to adding beans to the app ctx
 public class FunctionalBeans {
 
     @Bean
@@ -18,7 +18,7 @@ public class FunctionalBeans {
         return route().path("/function",
                 builder -> builder
                         .GET("", accept(APPLICATION_JSON), handler::getAllProducts)
-                        .GET("/{id}", accept(APPLICATION_JSON), handler::getPersonById)
+                        .GET("/{id}", accept(APPLICATION_JSON), handler::getProductById)
                         .POST("", handler::createProduct))
                 .build();
     }
