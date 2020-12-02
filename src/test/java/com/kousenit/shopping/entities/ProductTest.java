@@ -1,31 +1,38 @@
 package com.kousenit.shopping.entities;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
 import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.math.BigDecimal;
+import java.util.Optional;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class ProductTest {
 
-    private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();;
-    private static final Validator validator = factory.getValidator();
+    @Autowired
+    private Validator validator;
+
+    @Test
+    void autowiringWorked() {
+        assertNotNull(validator);
+        assertEquals(LocalValidatorFactoryBean.class, validator.getClass());
+    }
 
     @Test
     void nameCanNotBeBlank() {
         Product product = new Product("", 10.0);
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         assertEquals(1, violations.size());
-        for (ConstraintViolation<Product> violation : violations) {
-            System.out.println(violation.getMessage());
-        }
+
+        // Extract violation using set.iterator(); alternative using streams in price test
+        ConstraintViolation<Product> violation = violations.iterator().next();
+        assertEquals("A name is required", violation.getMessage());
     }
 
     @Test
@@ -33,8 +40,9 @@ class ProductTest {
         Product product = new Product("name", -1);
         Set<ConstraintViolation<Product>> violations = validator.validate(product);
         assertEquals(1, violations.size());
-        for (ConstraintViolation<Product> violation : violations) {
-            System.out.println(violation.getMessage());
-        }
+
+        Optional<ConstraintViolation<Product>> optionalViolation = violations.stream().findFirst();
+        assertTrue(optionalViolation.isPresent());
+        assertEquals("Price must be greater than zero", optionalViolation.get().getMessage());
     }
 }
