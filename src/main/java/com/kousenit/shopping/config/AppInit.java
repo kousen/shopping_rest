@@ -2,6 +2,8 @@ package com.kousenit.shopping.config;
 
 import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
+import com.kousenit.shopping.services.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -11,18 +13,15 @@ import java.util.Arrays;
 @Component
 @Profile("!test")
 public class AppInit implements CommandLineRunner {
-    private final ProductRepository repository;
+    private final ProductService service;
 
-    public AppInit(ProductRepository repository) {
-        this.repository = repository;
+    @Autowired
+    public AppInit(ProductService service) {
+        this.service = service;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        repository.deleteAll();
-        repository.saveAll(Arrays.asList(
-                new Product("baseball", 9.99),
-                new Product("football", 14.95),
-                new Product("basketball", 11.99)));
+        service.initializeDatabase();
     }
 }

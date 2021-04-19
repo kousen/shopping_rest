@@ -3,6 +3,7 @@ package com.kousenit.shopping.controllers;
 import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
 import com.kousenit.shopping.entities.ProductNotFoundException;
+import com.kousenit.shopping.services.ProductService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -19,22 +20,22 @@ import java.util.Optional;
 public class ProductController {
     private final Logger log = LoggerFactory.getLogger(ProductController.class.getName());
 
-    private final ProductRepository repository;
+    private final ProductService service;
 
-    public ProductController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductController(ProductService service) {
+        this.service = service;
     }
 
     @GetMapping
     public String showProducts(Model model) {
         model.addAttribute("product", new Product());
-        model.addAttribute("products", repository.findAll());
+        model.addAttribute("products", service.findAll());
         return "products";
     }
 
     @GetMapping("{id}")
     public String showProduct(@PathVariable Integer id, Model model) {
-        Optional<Product> optional = repository.findById(id);
+        Optional<Product> optional = service.findById(id);
         if (optional.isPresent()) {
             model.addAttribute("product", optional.get());
         } else {
@@ -52,21 +53,21 @@ public class ProductController {
         }
 
         log.info("Saving product: " + product);
-        repository.save(product);
+        service.saveProduct(product);
         return "redirect:/products";
     }
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteProduct(@PathVariable Integer id) {
-        repository.deleteById(id);
+        service.deleteProduct(id);
         return "redirect:/products";
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public String deleteAll() {
-        repository.deleteAll();
+        service.deleteAllInBatch();
         return "redirect:/products";
     }
 }
