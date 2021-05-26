@@ -17,6 +17,8 @@ spring:
     username: sa
     password: sa
     driver-class-name: org.h2.Driver
+#    schema: classpath*:schema.sql
+#    data: classpath*:data.sql
   config:
     activate:
       on-profile: test
