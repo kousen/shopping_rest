@@ -2,6 +2,7 @@ package com.kousenit.shopping.controllers;
 
 import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
+import com.kousenit.shopping.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -27,7 +28,7 @@ class ProductControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private ProductRepository repository;
+    private ProductService service;
 
     private final List<Product> products = Arrays.asList(
             new Product(1,"baseball", 9.99),
@@ -37,13 +38,13 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        Mockito.when(repository.findAll())
+        Mockito.when(service.findAll())
                 .thenReturn(products);
-        Mockito.when(repository.save(Mockito.any(Product.class)))
+        Mockito.when(service.saveProduct(Mockito.any(Product.class)))
                 .thenReturn(products.get(0),
                         products.get(1),
                         products.get(2));
-        Mockito.when(repository.findById(1))
+        Mockito.when(service.findById(1))
                 .thenReturn(Optional.of(products.get(0)));
     }
 
@@ -53,7 +54,7 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("products"))
                 .andExpect(model().attribute("products", products));
-        verify(repository).findAll();
+        verify(service).findAll();
     }
 
     @Test
@@ -62,7 +63,7 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("products"))
                 .andExpect(model().attribute("product", is(products.get(0))));
-        verify(repository).findById(1);
+        verify(service).findById(1);
     }
 
     @Test
@@ -87,7 +88,7 @@ class ProductControllerTest {
         mvc.perform(delete("/products"))
                 .andExpect(status().isNoContent())
                 .andExpect(view().name("redirect:/products"));
-        verify(repository).deleteAll();
+        verify(service).deleteAllInBatch();
     }
 
     @Test
@@ -95,6 +96,6 @@ class ProductControllerTest {
         mvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent())
                 .andExpect(view().name("redirect:/products"));
-        verify(repository).deleteById(anyInt());
+        verify(service).deleteProduct(anyInt());
     }
 }

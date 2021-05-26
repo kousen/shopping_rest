@@ -13,6 +13,11 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 @Configuration  // JavaConfig approach to adding beans to the app ctx
 public class FunctionalBeans {
 
+    // Alternative CommandLineRunner (replaces the AppInit class)
+//    public CommandLineRunner initialize(@Autowired ProductService service) {
+//        return args -> service.initializeDatabase();
+//    }
+
     @Bean
     public RouterFunction<ServerResponse> routerFunction(ProductHandler handler) {
         return route().path("/function",

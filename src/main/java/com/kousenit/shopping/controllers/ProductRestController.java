@@ -3,6 +3,7 @@ package com.kousenit.shopping.controllers;
 import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
 import com.kousenit.shopping.entities.ProductNotFoundException;
+import com.kousenit.shopping.services.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,31 +16,31 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/rest")
 public class ProductRestController {
-    private final ProductRepository repository;
+    private final ProductService service;
 
-    public ProductRestController(ProductRepository repository) {
-        this.repository = repository;
+    public ProductRestController(ProductService service) {
+        this.service = service;
     }
 
     @GetMapping
     public List<Product> getAllProducts(
             @RequestParam(required = false) Double minimumPrice) {
         if (minimumPrice != null) {
-            return repository.findAllByPriceGreaterThanEqual(minimumPrice);
+            return service.findAllByMinimumPrice(minimumPrice);
         }
-        return repository.findAll();
+        return service.findAll();
     }
 
     @GetMapping("{id}")
     public Product getProduct(@PathVariable("id") Integer id) {
-        return repository.findById(id)
+        return service.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Product> insertProduct(@RequestBody Product product) {
-        Product p = repository.save(product);
+        Product p = service.saveProduct(product);
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
                 .path("/{id}")
                 .buildAndExpand(p.getId())
@@ -50,30 +51,30 @@ public class ProductRestController {
     @PutMapping("{id}")
     public Product updateOrInsertProduct(@PathVariable Integer id,
                                  @RequestBody Product newProduct) {
-        return repository.findById(id).map(product -> {
+        return service.findById(id).map(product -> {
                     product.setName(newProduct.getName());
                     product.setPrice(newProduct.getPrice());
-                    return repository.save(product);
+                    return service.saveProduct(product);
                 }).orElseGet(() -> {
                    newProduct.setId(id);
-                   return repository.save(newProduct);
+                   return service.saveProduct(newProduct);
                 });
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable Integer id) {
-        Optional<Product> existingProduct = repository.findById(id);
+        Optional<Product> existingProduct = service.findById(id);
         if (existingProduct.isPresent()) {
-            repository.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            service.deleteProduct(id);
+            return ResponseEntity.noContent().build();
         } else {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAllProducts() {
-        repository.deleteAll();
+        service.deleteAllInBatch();
     }
 }
