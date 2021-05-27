@@ -11,7 +11,6 @@ import javax.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class ControllerAdvice {
 
-    @ResponseBody
     @ExceptionHandler(ProductNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public String productNotFoundHandler(ProductNotFoundException ex) {
