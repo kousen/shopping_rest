@@ -13,7 +13,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@Transactional
+@Transactional  // In a test, @Transactional causes each tx to rollback at end of test
 class ProductRepositoryTest {
     @Autowired
     private ProductRepository dao;

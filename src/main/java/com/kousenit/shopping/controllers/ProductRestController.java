@@ -1,9 +1,9 @@
 package com.kousenit.shopping.controllers;
 
-import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
 import com.kousenit.shopping.entities.ProductNotFoundException;
 import com.kousenit.shopping.services.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +18,12 @@ import java.util.Optional;
 public class ProductRestController {
     private final ProductService service;
 
+    @Autowired
     public ProductRestController(ProductService service) {
         this.service = service;
     }
 
-    @GetMapping
+    @GetMapping  // localhost:8080/rest?minimumPrice=5.0
     public List<Product> getAllProducts(
             @RequestParam(required = false) Double minimumPrice) {
         if (minimumPrice != null) {
