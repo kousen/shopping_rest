@@ -9,4 +9,5 @@ import java.util.List;
 @Transactional
 public interface ProductRepository extends JpaRepository<Product,Integer> {
     List<Product> findAllByPriceGreaterThanEqual(double amount);
+    List<Product> findTop10ByNameContainsOrderByPrice(String regex);
 }
