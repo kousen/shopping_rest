@@ -1,8 +1,8 @@
 package com.kousenit.shopping.entities;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.Objects;
 
 @SuppressWarnings("JpaDataSourceORMInspection")
@@ -12,10 +12,10 @@ public class Product {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "A name is required")
+    @NotBlank(message = "Products must have a name")
     private String name;
 
-    @Min(value = 0, message = "Price must be greater than zero")
+    @PositiveOrZero(message = "Price must be greater than zero")
     private double price;
 
     public Product() {}
