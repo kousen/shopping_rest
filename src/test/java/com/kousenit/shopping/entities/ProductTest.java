@@ -32,7 +32,7 @@ class ProductTest {
 
         // Extract violation using set.iterator(); alternative using streams in price test
         ConstraintViolation<Product> violation = violations.iterator().next();
-        assertEquals("A name is required", violation.getMessage());
+        assertEquals("Products must have a name", violation.getMessage());
     }
 
     @Test
