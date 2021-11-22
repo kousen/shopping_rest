@@ -34,12 +34,14 @@ public class ProductRestController {
 
     @GetMapping("{id}")
     public Product getProduct(@PathVariable("id") Integer id) {
+        // better alternative is:
+        // return ResponseEntity.of(service.findById(id));
         return service.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
+    // @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Product> insertProduct(@RequestBody Product product) {
         Product p = service.saveProduct(product);
         URI location = ServletUriComponentsBuilder.fromCurrentRequestUri()
