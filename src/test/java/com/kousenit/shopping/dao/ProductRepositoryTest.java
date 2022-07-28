@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,8 +50,8 @@ class ProductRepositoryTest {
     }
 
     @Test
-    void priceGE10() {
-        List<Product> products = dao.findAllByPriceGreaterThanEqual(10.0);
+    void priceGE12() {
+        List<Product> products = dao.findAllByPriceGreaterThanEqual(12.0);
         assertEquals(3, products.size());
         System.out.println(products);
     }

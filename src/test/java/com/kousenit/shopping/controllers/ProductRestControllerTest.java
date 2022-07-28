@@ -1,7 +1,6 @@
 package com.kousenit.shopping.controllers;
 
 import com.kousenit.shopping.entities.Product;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
@@ -19,7 +18,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SuppressWarnings("SqlResolve")
+@SuppressWarnings({"SqlResolve", "SqlNoDataSourceInspection"})
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureWebTestClient
 @Transactional
@@ -105,6 +104,7 @@ class ProductRestControllerTest {
 
         ResponseEntity<Product> response = template.postForEntity("/rest", product, Product.class);
         Product savedProduct = response.getBody();
+        assert savedProduct != null;
         assertAll(
                 () -> assertEquals(product.getName(), savedProduct.getName()),
                 () -> assertEquals(product.getPrice(), savedProduct.getPrice(), 0.01),
@@ -130,7 +130,7 @@ class ProductRestControllerTest {
     void getProductsWithMinimumPrice() {
         client.get()
                 .uri(uriBuilder -> uriBuilder.path("/rest")
-                        .queryParam("minimumPrice", 10.0)
+                        .queryParam("minimumPrice", 12.0)
                         .build())
                 .accept(MediaType.APPLICATION_JSON)
                 .exchange()
@@ -163,7 +163,7 @@ class ProductRestControllerTest {
                 .expectStatus().isNotFound();
     }
 
-    @Test @Disabled
+    @Test
     void deleteAllProducts() {
         client.delete()
                 .uri("/rest")

@@ -1,6 +1,5 @@
 package com.kousenit.shopping.controllers;
 
-import com.kousenit.shopping.dao.ProductRepository;
 import com.kousenit.shopping.entities.Product;
 import com.kousenit.shopping.services.ProductService;
 import org.springframework.http.MediaType;

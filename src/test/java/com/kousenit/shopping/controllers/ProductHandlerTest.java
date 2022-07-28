@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -86,12 +86,10 @@ class ProductHandlerTest {
         ResponseEntity<Product> response = template.postForEntity("/function", product, Product.class);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
         Product savedProduct = response.getBody();
+        assert savedProduct != null;
         assertAll(
                 () -> assertNotNull(savedProduct),
-                () -> {
-                    assert savedProduct != null;
-                    assertEquals(product.getName(), savedProduct.getName());
-                },
+                () -> assertEquals(product.getName(), savedProduct.getName()),
                 () -> assertEquals(product.getPrice(), savedProduct.getPrice(), 0.01),
                 () -> assertNotNull(savedProduct.getId()));
     }
