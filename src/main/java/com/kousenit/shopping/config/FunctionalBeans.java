@@ -14,6 +14,7 @@ import static org.springframework.web.servlet.function.RouterFunctions.route;
 public class FunctionalBeans {
 
     // Alternative CommandLineRunner (replaces the AppInit class)
+    // @Bean
 //    public CommandLineRunner initialize(@Autowired ProductService service) {
 //        return args -> service.initializeDatabase();
 //    }
