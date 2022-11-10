@@ -33,11 +33,25 @@ public class ProductRestController {
     }
 
     @GetMapping("{id}")
-    public Product getProduct(@PathVariable("id") Integer id) {
-        // better alternative is:
-        // return ResponseEntity.of(service.findById(id));
-        return service.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+    public ResponseEntity<Product> findById(@PathVariable Integer id) {
+        // Simplest option:
+        return ResponseEntity.of(productService.findProductById(id));
+        
+        // Best option if you need to customize the return value (see the ControllerAdvice class):
+//        return productService.findProductById(id).orElseThrow(
+//                () -> new ProductNotFoundException(id + ""));
+
+        // Works, but overly verbose
+//        Optional<Product> optionalProduct = productService.findProductById(id);
+//        if (optionalProduct.isPresent()) {
+//            return ResponseEntity.ok(optionalProduct.get());
+//        } else {
+//            return ResponseEntity.notFound().build();
+//        }
+//
+        // Functional version that replaces "if" with "map" and "orElseGet"
+//        return optionalProduct.map(ResponseEntity::ok)
+//                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
