@@ -1,7 +1,6 @@
 package com.kousenit.shopping.controllers;
 
 import com.kousenit.shopping.entities.Product;
-import com.kousenit.shopping.entities.ProductNotFoundException;
 import com.kousenit.shopping.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -27,6 +27,6 @@ dependencies {
 	testImplementation 'io.projectreactor:reactor-test'
 }
 
-tasks.named('test') {
+tasks.named('test', Test) {
 	useJUnitPlatform()
 }
